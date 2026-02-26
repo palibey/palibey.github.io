@@ -39,11 +39,13 @@
             background-color: var(--bg-color);
             background-image: radial-gradient(circle at top, #1f2833 0%, #0b0c10 70%);
             color: var(--text-primary);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-y: auto;
+            /* allow scrolling on tiny devices */
+            padding: 10px 0;
         }
 
         .app-container {
@@ -361,6 +363,63 @@
             opacity: 0.3;
             cursor: not-allowed;
             border-color: #555;
+        }
+
+        /* Responsive Mobile Touches */
+        @media (max-width: 900px) {
+            .app-container {
+                padding: 10px;
+                height: auto;
+                min-height: 100%;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .main-game-area {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .game-board {
+                padding: 15px;
+                flex: auto;
+            }
+
+            .prize-ladder {
+                flex: auto;
+                padding: 10px;
+            }
+
+            .prize-item {
+                padding: 5px;
+                font-size: 0.95rem;
+            }
+
+            .question-box {
+                font-size: 1.3rem;
+                padding: 20px;
+                margin-bottom: 25px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .option-button {
+                padding: 15px;
+                font-size: 1.05rem;
+            }
+
+            .option-letter {
+                font-size: 1.2rem;
+            }
+
+            .game-over-amount {
+                font-size: 2.5rem;
+            }
         }
     </style>
 </head>
