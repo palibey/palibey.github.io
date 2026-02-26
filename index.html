@@ -371,68 +371,6 @@
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
 
-        const DEFAULT_DATASTRING = `What is the capital of France?
-Erişkinlerde toplumdan edinilmiş pnömoninin en yaygın bakteriyel etkeni hangisidir?
-Streptococcus pneumoniae
-Staphylococcus aureus
-Mycoplasma pneumoniae
-Klebsiella pneumoniae
-
-Akut miyokard enfarktüsü şüphesiyle başvuran bir hastada, tanıda en duyarlı ve özgül olan biyobelirteç hangisidir?
-Kardiyak Troponin I/T
-CK-MB
-Myoglobin
-LDH
-
-Tip 2 Diyabet tedavisinde kullanılan ve kardiyovasküler mortaliteyi azalttığı kanıtlanmış olan SGLT-2 inhibitörü grup ilaç hangisidir?
-Empagliflozin
-Metformin
-Sitagliptin
-Pioglitazon
-
-Gebelik sırasında hipertansiyon tedavisi için güvenle tercih edilen ilk seçenek ajan hangisidir?
-Metildopa
-Enalapril
-Valsartan
-Furosemid
-
-Kafa içi basınç artışı (KİBA) olan bir hastada görülen "Cushing Triadı" hangilerini kapsar?
-Hipertansiyon, bradikardi, düzensiz solunum
-Hipotansiyon, taşikardi, takipne
-Hipertansiyon, taşikardi, ateş
-Hipotansiyon, bradikardi, kusma
-
-Çocukluk çağında en sık görülen nefrotik sendrom tipi hangisidir?
-Minimal Değişiklik Hastalığı (MCN)
-Fokal Segmental Glomeruloskleroz (FSGS)
-Membranöz Glomerulonefrit
-Membranoproliferatif Glomerulonefrit
-
-Wernicke ensefalopatisi tablosunda eksikliği görülen temel vitamin hangisidir?
-B1 Vitamini (Tiamin)
-B6 Vitamini (Pridoksin)
-B12 Vitamini (Kobalamin)
-C Vitamini (Askorbik Asit)
-
-Aort diseksiyonu tanısında altın standart kabul edilen görüntüleme yöntemi hangisidir?
-Kontrastlı BT Anjiyografi
-Akciğer Grafisi
-Transtorasik Ekokardiyografi
-Abdominal Ultrasonografi
-
-Bir hastada "hedef tahtası" (target lesion) şeklinde deri döküntüleri görülmesi en çok hangi tanıyı destekler?
-Eritema Multiforme
-Psoriazis
-Liken Planus
-Atopik Dermatit
-
-Akut apandisit şüphesi olan bir hastada sağ alt kadrana palpasyon yapıldığında ağrının artması hangi bulgu olarak adlandırılır?
-McBurney Noktası Hassasiyeti
-Murphy Belirtisi
-Grey-Turner Belirtisi
-Courvoisier Belirtisi
-`;
-
         const PRIZES = [
             "$100", "$200", "$300", "$500", "$1,000",
             "$2,000", "$4,000", "$8,000", "$16,000", "$32,000",
@@ -472,8 +410,28 @@ Courvoisier Belirtisi
         };
 
         const App = () => {
-            const [gameState, setGameState] = useState('start'); // start, playing, gameover_win, gameover_lose
-            const [datastring, setDatastring] = useState(DEFAULT_DATASTRING);
+            const [gameState, setGameState] = useState('loading'); // loading, start, playing, gameover_win, gameover_lose, dev_mode
+            const [datastring, setDatastring] = useState('');
+
+            useEffect(() => {
+                fetch('questions.txt')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
+                    .then(text => {
+                        setDatastring(text);
+                        setGameState('start');
+                    })
+                    .catch(err => {
+                        console.error("Failed to fetch questions:", err);
+                        // Fallback data in case questions.txt is missing
+                        setDatastring("What is the capital of France?\nParis\nLondon\nBerlin\nMadrid\n\nWhat is 2+2?\n4\n3\n5\n6\n\nIs the sky blue?\nYes\nNo\nMaybe\nSometimes");
+                        setGameState('start');
+                    });
+            }, []);
 
             const [questions, setQuestions] = useState([]);
             const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -597,6 +555,29 @@ Courvoisier Belirtisi
                 }
             };
 
+            const downloadQuestions = () => {
+                const element = document.createElement("a");
+                const file = new Blob([datastring], { type: 'text/plain' });
+                element.href = URL.createObjectURL(file);
+                element.download = "questions.txt";
+                document.body.appendChild(element); // Required for this to work in FireFox
+                element.click();
+                document.body.removeChild(element);
+            };
+
+            if (gameState === 'loading') {
+                return (
+                    <div className="app-container">
+                        <div className="header">
+                            <h1>Who Wants to be a Millionaire</h1>
+                        </div>
+                        <div className="screen">
+                            <h2>Loading questions...</h2>
+                        </div>
+                    </div>
+                );
+            }
+
             if (gameState === 'start') {
                 return (
                     <div className="app-container">
@@ -625,7 +606,10 @@ Courvoisier Belirtisi
                                     onChange={(e) => setDatastring(e.target.value)}
                                 />
                             </div>
-                            <button className="btn-primary" onClick={() => setGameState('start')}>Save & Return</button>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <button className="btn-secondary" onClick={downloadQuestions}>Download questions.txt</button>
+                                <button className="btn-primary" onClick={() => setGameState('start')}>Save & Return</button>
+                            </div>
                         </div>
                     </div>
                 );
@@ -712,4 +696,3 @@ Courvoisier Belirtisi
 </body>
 
 </html>
-
