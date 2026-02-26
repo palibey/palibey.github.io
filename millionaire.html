@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who Wants to be a Millionaire</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --container-bg: rgba(31, 40, 51, 0.85);
+            --text-primary: #c5c6c7;
+            --accent-cyan: #66fcf1;
+            --accent-teal: #45a29e;
+            --correct-green: #38bdf8;
+            /* keeping it cyan-ish for aesthetics but green for correct */
+            --wrong-red: #ef4444;
+            --orange: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at top, #1f2833 0%, #0b0c10 70%);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
+        }
+
+        .main-game-area {
+            display: flex;
+            flex: 1;
+            gap: 20px;
+        }
+
+        .game-board {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--container-bg);
+            border-radius: 20px;
+            border: 1px solid var(--accent-teal);
+            box-shadow: 0 0 30px rgba(69, 162, 158, 0.2);
+            padding: 30px;
+            position: relative;
+        }
+
+        .prize-ladder {
+            flex: 1;
+            background: var(--container-bg);
+            border-radius: 20px;
+            border: 1px solid var(--accent-teal);
+            padding: 20px;
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: space-around;
+        }
+
+        .prize-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            padding: 5px 15px;
+            border-radius: 10px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .prize-item.active {
+            background: var(--orange);
+            color: #fff;
+            font-weight: bold;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+        }
+
+        .prize-item.milestone {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .question-box {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--accent-cyan);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: inset 0 0 20px rgba(102, 252, 241, 0.2);
+            line-height: 1.4;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .option-button {
+            background: linear-gradient(135deg, rgba(31, 40, 51, 1) 0%, rgba(11, 12, 16, 1) 100%);
+            border: 2px solid var(--accent-teal);
+            color: white;
+            font-size: 1.2rem;
+            padding: 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-button:hover:not(:disabled) {
+            background: rgba(69, 162, 158, 0.3);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
+            transform: scale(1.02);
+        }
+
+        .option-letter {
+            color: var(--orange);
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.4rem;
+        }
+
+        .option-button.selected {
+            background: #eab308;
+            border-color: #ca8a04;
+            color: #111;
+        }
+
+        .option-button.selected .option-letter {
+            color: #111;
+        }
+
+        .option-button.correct {
+            background: #22c55e;
+            border-color: #16a34a;
+            color: white;
+            animation: pulseCorrect 1s infinite alternate;
+        }
+
+        .option-button.correct .option-letter {
+            color: white;
+        }
+
+        .option-button.wrong {
+            background: var(--wrong-red);
+            border-color: #b91c1c;
+            color: white;
+            animation: shake 0.5s;
+        }
+
+        .option-button.wrong .option-letter {
+            color: white;
+        }
+
+        .option-button.correct-after-wrong {
+            border-color: #22c55e;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.8);
+        }
+
+        .option-button:disabled {
+            cursor: default;
+        }
+
+        .option-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes pulseCorrect {
+            from {
+                box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+            }
+
+            to {
+                box-shadow: 0 0 25px rgba(34, 197, 94, 1);
+            }
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-10px);
+            }
+
+            40% {
+                transform: translateX(10px);
+            }
+
+            60% {
+                transform: translateX(-10px);
+            }
+
+            80% {
+                transform: translateX(10px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* Screens */
+        .screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-cyan));
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            color: #111;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(102, 252, 241, 0.8);
+        }
+
+        .btn-secondary {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--accent-teal);
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: var(--accent-cyan);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-teal);
+            color: #fff;
+        }
+
+        .textarea-container {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--accent-teal);
+            color: var(--text-primary);
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 10px;
+            resize: vertical;
+            font-family: monospace;
+        }
+
+        .textarea-help {
+            font-size: 0.9rem;
+            color: var(--accent-teal);
+            margin-bottom: 15px;
+        }
+
+        .game-over-amount {
+            font-size: 4rem;
+            color: var(--orange);
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .lifelines {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-self: flex-start;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .lifeline-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--accent-teal);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .lifeline-btn:hover:not(:disabled) {
+            background: var(--accent-teal);
+            color: #fff;
+        }
+
+        .lifeline-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        const DEFAULT_DATASTRING = `What is the capital of France?
+Paris
+London
+Berlin
+Madrid
+
+Which planet is known as the Red Planet?
+Mars
+Venus
+Jupiter
+Saturn
+
+Who wrote "Romeo and Juliet"?
+William Shakespeare
+Charles Dickens
+Jane Austen
+Mark Twain
+
+What is the largest ocean on Earth?
+Pacific Ocean
+Atlantic Ocean
+Indian Ocean
+Arctic Ocean
+
+Which element has the chemical symbol 'O'?
+Oxygen
+Gold
+Silver
+Iron
+
+What is the fastest land animal?
+Cheetah
+Lion
+Horse
+Leopard
+
+How many continents are there?
+7
+5
+6
+8
+
+What gas do plants absorb from the atmosphere?
+Carbon Dioxide
+Oxygen
+Nitrogen
+Hydrogen
+
+Who painted the Mona Lisa?
+Leonardo da Vinci
+Vincent van Gogh
+Pablo Picasso
+Claude Monet
+
+What is the hardest natural substance on Earth?
+Diamond
+Granite
+Gold
+Iron
+
+What is the longest river in the world?
+Nile
+Amazon
+Yangtze
+Mississippi
+
+Which country is home to the kangaroo?
+Australia
+India
+South Africa
+Brazil
+
+In what year did the Titanic sink?
+1912
+1905
+1918
+1923
+
+What is the main ingredient in guacamole?
+Avocado
+Tomato
+Onion
+Lime
+
+Which instrument has 88 keys?
+Piano
+Guitar
+Violin
+Flute`;
+
+        const PRIZES = [
+            "$100", "$200", "$300", "$500", "$1,000",
+            "$2,000", "$4,000", "$8,000", "$16,000", "$32,000",
+            "$64,000", "$125,000", "$250,000", "$500,000", "$1,000,000"
+        ];
+
+        const MILESTONES = [4, 9, 14]; // Indices for $1k, $32k, $1M
+
+        // Helper: Shuffle Array
+        const shuffle = (array) => {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        };
+
+        // Parser
+        const parseQuestions = (text) => {
+            const blocks = text.trim().split(/\n\s*\n/);
+            const questions = [];
+
+            blocks.forEach(block => {
+                const lines = block.split('\n').map(l => l.trim()).filter(l => l);
+                if (lines.length >= 5) {
+                    questions.push({
+                        q: lines[0],
+                        correct: lines[1],
+                        wrong1: lines[2],
+                        wrong2: lines[3],
+                        wrong3: lines[4]
+                    });
+                }
+            });
+            return questions;
+        };
+
+        const App = () => {
+            const [gameState, setGameState] = useState('start'); // start, playing, gameover_win, gameover_lose
+            const [datastring, setDatastring] = useState(DEFAULT_DATASTRING);
+
+            const [questions, setQuestions] = useState([]);
+            const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+            const [options, setOptions] = useState([]);
+
+            const [selectedAnswer, setSelectedAnswer] = useState(null);
+            const [answerState, setAnswerState] = useState(''); // selected, correct, wrong
+
+            const [hiddenIndices, setHiddenIndices] = useState([]);
+            const [lifeline5050Used, setLifeline5050Used] = useState(false);
+
+            const [earnedPrize, setEarnedPrize] = useState("$0");
+
+            const startGame = () => {
+                let parsed = parseQuestions(datastring);
+                if (parsed.length === 0) {
+                    alert('Invalid datastring. Ensure blocks are separated by empty lines and each block has a Question, Correct Answer, and 3 Wrong Answers.');
+                    return;
+                }
+
+                // Shuffle all questions and pick the first 15 (or max available)
+                parsed = shuffle(parsed).slice(0, 15);
+
+                setQuestions(parsed);
+                setCurrentQuestionIndex(0);
+                setLifeline5050Used(false);
+                setEarnedPrize("$0");
+
+                prepareQuestion(parsed[0]);
+                setGameState('playing');
+            };
+
+            const prepareQuestion = (qObj) => {
+                if (!qObj) return;
+                const opts = shuffle([
+                    { text: qObj.correct, isCorrect: true },
+                    { text: qObj.wrong1, isCorrect: false },
+                    { text: qObj.wrong2, isCorrect: false },
+                    { text: qObj.wrong3, isCorrect: false }
+                ]);
+                setOptions(opts);
+                setSelectedAnswer(null);
+                setAnswerState('');
+                setHiddenIndices([]);
+            };
+
+            const handleOptionClick = (idx) => {
+                if (answerState) return; // Prevent multiple clicks
+
+                setSelectedAnswer(idx);
+                setAnswerState('selected');
+
+                // Wait, then reveal
+                setTimeout(() => {
+                    const isCorrect = options[idx].isCorrect;
+                    setAnswerState(isCorrect ? 'correct' : 'wrong');
+
+                    setTimeout(() => {
+                        if (isCorrect) {
+                            const newIndex = currentQuestionIndex + 1;
+                            setEarnedPrize(PRIZES[currentQuestionIndex]);
+
+                            if (newIndex >= questions.length || newIndex >= 15) {
+                                setGameState('gameover_win');
+                            } else {
+                                setCurrentQuestionIndex(newIndex);
+                                prepareQuestion(questions[newIndex]);
+                            }
+                        } else {
+                            // Calculate safe haven milestone prize
+                            let fallbackPrize = "$0";
+                            for (let i = MILESTONES.length - 1; i >= 0; i--) {
+                                if (currentQuestionIndex > MILESTONES[i]) {
+                                    fallbackPrize = PRIZES[MILESTONES[i]];
+                                    break;
+                                }
+                            }
+                            setEarnedPrize(fallbackPrize);
+                            setGameState('gameover_lose');
+                        }
+                    }, 2500);
+                }, 1500);
+            };
+
+            const use5050 = () => {
+                if (lifeline5050Used || answerState) return;
+
+                setLifeline5050Used(true);
+                const wrongIndices = [];
+                options.forEach((opt, i) => {
+                    if (!opt.isCorrect) wrongIndices.push(i);
+                });
+
+                const shuffledWrongs = shuffle(wrongIndices);
+                setHiddenIndices([shuffledWrongs[0], shuffledWrongs[1]]);
+            };
+
+            const getOptionClass = (idx) => {
+                let classes = "option-button";
+                if (hiddenIndices.includes(idx)) classes += " hidden";
+
+                if (selectedAnswer === idx) {
+                    if (answerState === 'selected') classes += " selected";
+                    if (answerState === 'correct') classes += " correct";
+                    if (answerState === 'wrong') classes += " wrong";
+                } else if (answerState === 'wrong' && options[idx].isCorrect) {
+                    classes += " correct-after-wrong";
+                }
+
+                return classes;
+            };
+
+            const letters = ['A', 'B', 'C', 'D'];
+
+            const enterDevMode = () => {
+                const pwd = prompt("Enter Developer Password:");
+                if (pwd === "admin123") {
+                    setGameState('dev_mode');
+                } else if (pwd !== null) {
+                    alert("Incorrect Password!");
+                }
+            };
+
+            if (gameState === 'start') {
+                return (
+                    <div className="app-container">
+                        <div className="header">
+                            <h1>Who Wants to be a Millionaire</h1>
+                        </div>
+                        <div className="screen">
+                            <button className="btn-primary" onClick={startGame}>PLAY GAME</button>
+                            <button className="btn-secondary" onClick={enterDevMode}>Developer Mode</button>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (gameState === 'dev_mode') {
+                return (
+                    <div className="app-container">
+                        <div className="header">
+                            <h1>Developer Mode</h1>
+                        </div>
+                        <div className="screen">
+                            <div className="textarea-container">
+                                <p className="textarea-help">Modify your questions below. Format: Question, Correct, Wrong1, Wrong2, Wrong3 (separated by empty lines)</p>
+                                <textarea
+                                    value={datastring}
+                                    onChange={(e) => setDatastring(e.target.value)}
+                                />
+                            </div>
+                            <button className="btn-primary" onClick={() => setGameState('start')}>Save & Return</button>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (gameState === 'gameover_lose' || gameState === 'gameover_win') {
+                const isWin = gameState === 'gameover_win';
+                return (
+                    <div className="app-container">
+                        <div className="screen">
+                            <h1 style={{ color: isWin ? 'var(--correct-green)' : 'var(--wrong-red)', fontSize: '3rem' }}>
+                                {isWin ? "CONGRATULATIONS!" : "GAME OVER"}
+                            </h1>
+                            <h2>You walk away with</h2>
+                            <div className="game-over-amount">{earnedPrize}</div>
+                            <button className="btn-primary" onClick={() => setGameState('start')}>PLAY AGAIN</button>
+                        </div>
+                    </div>
+                );
+            }
+
+            const currentQ = questions[currentQuestionIndex];
+
+            return (
+                <div className="app-container">
+                    <div className="header">
+                        <h1>Who Wants to be a Millionaire</h1>
+                    </div>
+
+                    <div className="main-game-area">
+                        <div className="game-board">
+
+                            <div className="lifelines">
+                                <button
+                                    className="lifeline-btn"
+                                    onClick={use5050}
+                                    disabled={lifeline5050Used || !!answerState}
+                                >
+                                    50:50
+                                </button>
+                            </div>
+
+                            <div className="question-box">
+                                {currentQ?.q}
+                            </div>
+
+                            <div className="options-grid">
+                                {options.map((opt, idx) => (
+                                    <button
+                                        key={idx}
+                                        className={getOptionClass(idx)}
+                                        onClick={() => handleOptionClick(idx)}
+                                        disabled={!!answerState}
+                                    >
+                                        <span className="option-letter">{letters[idx]}:</span>
+                                        <span className="option-text">{opt.text}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="prize-ladder">
+                            {PRIZES.map((prize, idx) => {
+                                let cName = "prize-item";
+                                if (idx === currentQuestionIndex) cName += " active";
+                                if (MILESTONES.includes(idx)) cName += " milestone";
+
+                                return (
+                                    <div key={idx} className={cName}>
+                                        <span style={{ width: '30px', color: 'var(--orange)' }}>{idx + 1}</span>
+                                        <span style={{ flex: 1, textAlign: 'right' }}>{prize}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
