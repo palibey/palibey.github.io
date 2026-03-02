@@ -1,34 +1,239 @@
-Q: Which core library is necessary for styling components in a modern generic React ecosystem?
-- Tailwind
-- Emotion
-- Vanilla CSS
-- Styled-Components
-A: Vanilla CSS
+Q: Hücre zarının dış yaprağında en bol bulunan fosfolipid aşağıdakilerden hangisidir?
+- Fosfatidilinositol
+- Fosfatidilserin
+- Fosfatidiletanolamin
+- Fosfatidilkolin
+- Kardiyolipin
+A: Fosfatidilkolin
 
-Q: What is the primary purpose of ReactDOM in a React application?
-- Managing global state
-- Connecting React components to the browser DOM
-- Handling HTTP requests
-- Parsing Markdown files
-A: Connecting React components to the browser DOM
+Q: Aşağıdaki kaslardan hangisi tamamen nervus ulnaris tarafından uyarılır?
+- M. flexor carpi radialis
+- M. flexor carpi ulnaris
+- M. pronator teres
+- M. brachioradialis
+- M. palmaris longus
+A: M. flexor carpi ulnaris
 
-Q: Which hook is used to perform side effects in functional components?
-- useState
-- useEffect
-- useReducer
-- useMemo
-A: useEffect
+Q: Kafa çiftlerinden hangisi parasempatik lif içermez?
+- N. oculomotorius (CN III)
+- N. facialis (CN VII)
+- N. glossopharyngeus (CN IX)
+- N. vagus (CN X)
+- N. trigeminus (CN V)
+A: N. trigeminus (CN V)
 
-Q: What does the term "glassmorphism" refer to in Web Design?
-- Creating 3D models with WebGL
-- A UI trend featuring frosted glass-like translucent effects
-- Morphing SVG animations
-- CSS Grid based masonry layouts
-A: A UI trend featuring frosted glass-like translucent effects
+Q: Hangi enzim eksikliğinde Tay-Sachs hastalığı görülür?
+- Hekzozaminidaz A
+- Glukoserebrozidaz
+- Sfingomiyelinaz
+- Alfa-galaktozidaz A
+- Arilsülfataz A
+A: Hekzozaminidaz A
 
-Q: Which command creates a standard static production build with Vite?
-- npm run start
-- npm run build
-- vite deploy
-- vite static
-A: npm run build
+Q: DNA replikasyonunda Okazaki fragmanlarını birleştiren enzim aşağıdakilerden hangisidir?
+- DNA Polimeraz I
+- DNA Ligaz
+- Helikaz
+- Primaz
+- Topoizomeraz
+A: DNA Ligaz
+
+Q: Erişkinlerde en sık görülen lösemi tipi aşağıdakilerden hangisidir?
+- Akut Lenfoblastik Lösemi (ALL)
+- Kronik Lenfositik Lösemi (KLL)
+- Akut Myeloid Lösemi (AML)
+- Kronik Myeloid Lösemi (KML)
+- Hairy Cell Lösemi
+A: Kronik Lenfositik Lösemi (KLL)
+
+Q: Miyokard enfarktüsü sonrası 3-14. günlerde ortaya çıkan, ateş ve perikardit ile karakterize sendrom hangisidir?
+- Dressler Sendromu
+- Tietze Sendromu
+- Brugada Sendromu
+- Leriche Sendromu
+- Trousseau Sendromu
+A: Dressler Sendromu
+
+Q: Aşağıdaki hücre karsinomlarından hangisi tiroidin parafoliküler C hücrelerinden köken alır?
+- Papiller karsinom
+- Foliküler karsinom
+- Medüller karsinom
+- Anaplastik karsinom
+- Hürthle hücreli karsinom
+A: Medüller karsinom
+
+Q: Hangi antikorlar Sistemik Lupus Eritematozus (SLE) için en spesifiktir?
+- Anti-Ro, Anti-La
+- Anti-dsDNA, Anti-Smith
+- Anti-Sentromer
+- Anti-Scl-70
+- Anti-Jo-1
+A: Anti-dsDNA, Anti-Smith
+
+Q: Hemofili A hastalığında hangi pıhtılaşma faktörünün eksikliği söz konusudur?
+- Faktör VII
+- Faktör VIII
+- Faktör IX
+- Faktör XI
+- Faktör XII
+A: Faktör VIII
+
+Q: Gebelikte en sık karşılaşılan cerrahi acil durum aşağıdakilerden hangisidir?
+- Akut Apandisit
+- Akut Kolesistit
+- Peptik Ülser Perforasyonu
+- Akut Pankreatit
+- İntestinal Obstrüksiyon
+A: Akut Apandisit
+
+Q: Aşağıdaki ilaçlardan hangisi bir ACE (Anjiyotensin Dönüştürücü Enzim) inhibitörüdür?
+- Losartan
+- Amlodipin
+- Enalapril
+- Metoprolol
+- Diltiazem
+A: Enalapril
+
+Q: Parkinson hastalığının tedavisinde kullanılan ve periferal dekarboksilaz inhibitörü olan ilaç hangisidir?
+- Levodopa
+- Karbidopa
+- Selegilin
+- Bromokriptin
+- Amantadin
+A: Karbidopa
+
+Q: Çocuklarda en sık görülen primer beyin tümörü aşağıdakilerden hangisidir?
+- Glioblastoma multiforme
+- Astrositom
+- Medulloblastom
+- Ependimom
+- Kraniyofarenjiyom
+A: Astrositom
+
+Q: Astımda akut atak tedavisinde ilk tercih edilecek ilaç grubu hangisidir?
+- İnhale kortikosteroidler
+- Kisa etkili beta-2 agonistler (SABA)
+- Uzun etkili beta-2 agonistler (LABA)
+- Metilksantinler
+- Lökotrien reseptör antagonistleri
+A: Kisa etkili beta-2 agonistler (SABA)
+
+Q: Peptik ülser tedavisinde Helicobacter pylori eradikasyonu için kullanılan üçlü tedavide genellikle HANGİ antibiyotik ikilisi proton pompa inhibitörüne (PPİ) eklenir?
+- Siprofloksasin ve Metronidazol
+- Amoksisilin ve Klaritromisin
+- Amoksisilin ve Sefuroksim
+- Azitromisin ve Doksisiklin
+- Gentamisin ve Penisilin
+A: Amoksisilin ve Klaritromisin
+
+Q: Hangi vitaminin eksikliğinde Wernicke-Korsakoff sendromu görülür?
+- B1 vitamini (Tiamin)
+- B2 vitamini (Riboflavin)
+- B3 vitamini (Niasin)
+- B6 vitamini (Piridoksin)
+- B12 vitamini (Kobalamin)
+A: B1 vitamini (Tiamin)
+
+Q: Demir eksikliği anemisinin laboratuvar bulgularında aşağıdakilerden hangisi beklenmez?
+- Düşük serum demiri
+- Yüksek total demir bağlama kapasitesi
+- Düșük ferritin
+- Yüksek MCV (Makrositoz)
+- Hipokromi
+A: Yüksek MCV (Makrositoz)
+
+Q: Diabetik ketoasidoz (DKA) tanısında ilk bakılması gereken en kritik elektrolit aşağıdakilerden hangisidir?
+- Sodyum
+- Kalsiyum
+- Potasyum
+- Magnezyum
+- Klor
+A: Potasyum
+
+Q: Aşağıdaki virüslerden hangisi servikal kanser gelişiminde en sık saptanan yüksek riskli tiptir?
+- HPV Tip 6
+- HPV Tip 11
+- HPV Tip 16
+- HSV Tip 2
+- CMV
+A: HPV Tip 16
+
+Q: Mide asit salgısını inhibe eden ve proton pompasına irreversibl bağlanan ilaç hangisidir?
+- Ranitidin
+- Famotidin
+- Omeprazol
+- Sukralfat
+- Bizmut
+A: Omeprazol
+
+Q: Aşağıdaki hastalıklardan hangisi otonom dominant kalıtılır?
+- Kistik fibrozis
+- Orak hücreli anemi
+- Fenilketonüri
+- Ailevi hiperkolesterolemi
+- Tay-Sachs hastalığı
+A: Ailevi hiperkolesterolemi
+
+Q: Glokom tedavisinde göz içi basıncını düşürmek için kullanılan prostaglandin analoğu aşağıdakilerden hangisidir?
+- Timolol
+- Pilokarpin
+- Latanoprost
+- Dorzolamid
+- Brimonidin
+A: Latanoprost
+
+Q: Yenidoğanda fizyolojik sarılığın genellikle görülmeye başladığı en erken zaman nedir?
+- Doğduktan sonra ilk 24 saat içinde
+- Yaşamın 2. veya 3. günü
+- Yaşamın 7. günü
+- Yaşamın 2. haftası
+- Doğumdan hemen sonra
+A: Yaşamın 2. veya 3. günü
+
+Q: Tüberküloz tedavisinde kullanılan ve en sık optik nörit yan etkisine yol açan ilaç hangisidir?
+- İzoniyazid
+- Rifampisin
+- Pirazinamid
+- Etambutol
+- Streptomisin
+A: Etambutol
+
+Q: Akut miyokard enfarktüsü tanısında ilk yükselen kardiyak belirteç aşağıdakilerden hangisidir?
+- Troponin I
+- Troponin T
+- Miyoglobin
+- CK-MB
+- AST
+A: Miyoglobin
+
+Q: Graves hastalığında (hipertiroidi) görülen en spesifik antikor aşağıdakilerden hangisidir?
+- Anti-TPO
+- Anti-Tiroglobulin
+- TSH reseptör antikoru (TRab)
+- Anti-mikrozomal antikor
+- ANA
+A: TSH reseptör antikoru (TRab)
+
+Q: Cerrahi sonrası erken dönemde (ilk 24-48 saat) ateşin en sık nedeni aşağıdakilerden hangisidir?
+- Yara yeri enfeksiyonu
+- Derin ven trombozu
+- Atelektazi
+- İdrar yolu enfeksiyonu
+- İntraabdominal apse
+A: Atelektazi
+
+Q: Gebelikte fetüste nöral tüp defektini önlemek amacıyla rutin olarak başlanması önerilen vitamin hangisidir?
+- C vitamini
+- D vitamini
+- Folik asit
+- B12 vitamini
+- E vitamini
+A: Folik asit
+
+Q: Multiple Skleroz (MS) tanısında BOS incelemesinde en sık rastlanan bulgu nedir?
+- Düşük glukoz
+- Yüksek lökosit (Nötrofil ağırlıklı)
+- Oligoklonal bant pozitifliği
+- Yüksek protein (1000 mg/dl üzeri)
+- Eritrosit artışı
+A: Oligoklonal bant pozitifliği
