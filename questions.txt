@@ -1,59 +1,34 @@
-Erişkinlerde toplumdan edinilmiş pnömoninin en yaygın bakteriyel etkeni hangisidir?
-Streptococcus pneumoniae
-Staphylococcus aureus
-Mycoplasma pneumoniae
-Klebsiella pneumoniae
+Q: Which core library is necessary for styling components in a modern generic React ecosystem?
+- Tailwind
+- Emotion
+- Vanilla CSS
+- Styled-Components
+A: Vanilla CSS
 
-Akut miyokard enfarktüsü şüphesiyle başvuran bir hastada, tanıda en duyarlı ve özgül olan biyobelirteç hangisidir?
-Kardiyak Troponin I/T
-CK-MB
-Myoglobin
-LDH
+Q: What is the primary purpose of ReactDOM in a React application?
+- Managing global state
+- Connecting React components to the browser DOM
+- Handling HTTP requests
+- Parsing Markdown files
+A: Connecting React components to the browser DOM
 
-Tip 2 Diyabet tedavisinde kullanılan ve kardiyovasküler mortaliteyi azalttığı kanıtlanmış olan SGLT-2 inhibitörü grup ilaç hangisidir?
-Empagliflozin
-Metformin
-Sitagliptin
-Pioglitazon
+Q: Which hook is used to perform side effects in functional components?
+- useState
+- useEffect
+- useReducer
+- useMemo
+A: useEffect
 
-Gebelik sırasında hipertansiyon tedavisi için güvenle tercih edilen ilk seçenek ajan hangisidir?
-Metildopa
-Enalapril
-Valsartan
-Furosemid
+Q: What does the term "glassmorphism" refer to in Web Design?
+- Creating 3D models with WebGL
+- A UI trend featuring frosted glass-like translucent effects
+- Morphing SVG animations
+- CSS Grid based masonry layouts
+A: A UI trend featuring frosted glass-like translucent effects
 
-Kafa içi basınç artışı (KİBA) olan bir hastada görülen "Cushing Triadı" hangilerini kapsar?
-Hipertansiyon, bradikardi, düzensiz solunum
-Hipotansiyon, taşikardi, takipne
-Hipertansiyon, taşikardi, ateş
-Hipotansiyon, bradikardi, kusma
-
-Çocukluk çağında en sık görülen nefrotik sendrom tipi hangisidir?
-Minimal Değişiklik Hastalığı (MCN)
-Fokal Segmental Glomeruloskleroz (FSGS)
-Membranöz Glomerulonefrit
-Membranoproliferatif Glomerulonefrit
-
-Wernicke ensefalopatisi tablosunda eksikliği görülen temel vitamin hangisidir?
-B1 Vitamini (Tiamin)
-B6 Vitamini (Pridoksin)
-B12 Vitamini (Kobalamin)
-C Vitamini (Askorbik Asit)
-
-Aort diseksiyonu tanısında altın standart kabul edilen görüntüleme yöntemi hangisidir?
-Kontrastlı BT Anjiyografi
-Akciğer Grafisi
-Transtorasik Ekokardiyografi
-Abdominal Ultrasonografi
-
-Bir hastada "hedef tahtası" (target lesion) şeklinde deri döküntüleri görülmesi en çok hangi tanıyı destekler?
-Eritema Multiforme
-Psoriazis
-Liken Planus
-Atopik Dermatit
-
-Akut apandisit şüphesi olan bir hastada sağ alt kadrana palpasyon yapıldığında ağrının artması hangi bulgu olarak adlandırılır?
-McBurney Noktası Hassasiyeti
-Murphy Belirtisi
-Grey-Turner Belirtisi
-Courvoisier Belirtisi
+Q: Which command creates a standard static production build with Vite?
+- npm run start
+- npm run build
+- vite deploy
+- vite static
+A: npm run build
