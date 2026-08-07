@@ -1,1 +1,587 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tercih Olasılığı Hesaplayıcı</title>
+<style>
+  :root{
+    --bg:#14161a;
+    --panel:#1b1e24;
+    --panel-2:#212530;
+    --line:#2c313b;
+    --text:#e6e8ec;
+    --muted:#9aa2b1;
+    --dim:#6b7484;
+    --accent:#f0b429;
+    --accent-soft:rgba(240,180,41,.14);
+    --radius:10px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    font-size:16px;
+    line-height:1.5;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:32px 20px 56px}
 
+  header.page{margin-bottom:24px}
+  header.page h1{
+    margin:0 0 6px;
+    font-size:26px;
+    font-weight:650;
+    letter-spacing:-.02em;
+  }
+  header.page p{margin:0;color:var(--muted);font-size:14px}
+  header.page code{font-family:var(--mono);font-size:13px;color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+  @media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px;
+  }
+  .card + .card{margin-top:18px}
+  .card h2{
+    margin:0 0 14px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  .col-head{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 108px 40px;
+    gap:8px;
+    padding:0 2px 8px;
+    font-size:12px;
+    color:var(--dim);
+    letter-spacing:.04em;
+  }
+  .col-head span:nth-child(2){text-align:left}
+  .col-head span:last-child{visibility:hidden}
+
+  .row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 108px 40px;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  input[type="text"],input[type="number"]{
+    width:100%;
+    min-width:0;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    color:var(--text);
+    font:inherit;
+    font-size:15px;
+    padding:9px 11px;
+    transition:border-color .12s ease, box-shadow .12s ease;
+  }
+  input[type="number"]{font-family:var(--mono);font-size:14px}
+  input::placeholder{color:var(--dim)}
+  input:hover{border-color:#3a414e}
+  input:focus{
+    outline:none;
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-soft);
+  }
+
+  button{
+    font:inherit;
+    font-size:14px;
+    color:var(--text);
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:9px 14px;
+    cursor:pointer;
+    transition:background .12s ease,border-color .12s ease,color .12s ease;
+  }
+  button:hover{background:#2a2f3a;border-color:#3a414e}
+  button:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+  button.primary{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#1a1400;
+    font-weight:600;
+  }
+  button.primary:hover{background:#f7c34a;border-color:#f7c34a}
+  button.del{
+    padding:0;
+    width:40px;
+    color:var(--dim);
+    font-size:18px;
+    line-height:1;
+  }
+  button.del:hover{color:#ff8a8a;border-color:#54383c;background:#2a2024}
+
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+  .equal{
+    display:flex;
+    gap:6px;
+    align-items:center;
+    margin-left:auto;
+  }
+  .equal input{width:88px}
+  @media (max-width:520px){
+    .equal{margin-left:0;width:100%}
+    .equal input{flex:1}
+    .toolbar > button{flex:1}
+  }
+
+  .headline{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .headline .big{
+    font-size:clamp(38px,9vw,56px);
+    font-weight:700;
+    letter-spacing:-.03em;
+    line-height:1.05;
+    color:var(--accent);
+    font-variant-numeric:tabular-nums;
+  }
+  .headline .cap{font-size:14px;color:var(--muted)}
+
+  .bar{
+    height:10px;
+    background:var(--panel-2);
+    border-radius:99px;
+    overflow:hidden;
+    margin:14px 0 18px;
+    border:1px solid var(--line);
+  }
+  .bar > i{
+    display:block;
+    height:100%;
+    width:0;
+    background:var(--accent);
+    border-radius:99px;
+    transition:width .25s ease;
+  }
+
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+  }
+  @media (max-width:480px){.stats{grid-template-columns:minmax(0,1fr)}}
+  .stat{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:11px 12px;
+  }
+  .stat dt{margin:0 0 4px;font-size:12px;color:var(--muted)}
+  .stat dd{margin:0;font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
+
+  .empty{color:var(--muted);font-size:15px;margin:4px 0}
+
+  .dist{display:flex;flex-direction:column;gap:6px}
+  .dist-row{
+    display:grid;
+    grid-template-columns:52px minmax(0,1fr) 74px;
+    gap:10px;
+    align-items:center;
+    font-size:13px;
+  }
+  .dist-row .k{color:var(--muted);font-family:var(--mono)}
+  .dist-row .track{
+    height:16px;
+    background:var(--panel-2);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .dist-row .fill{
+    display:block;
+    height:100%;
+    width:0;
+    background:var(--accent);
+    opacity:.85;
+    border-radius:4px;
+    transition:width .25s ease;
+  }
+  .dist-row.zero .fill{background:#5a6272;opacity:1}
+  .dist-row .v{
+    text-align:right;
+    font-family:var(--mono);
+    color:var(--muted);
+    font-variant-numeric:tabular-nums;
+  }
+  .dist-row.peak .v{color:var(--text)}
+
+  .note{
+    margin:26px auto 0;
+    max-width:720px;
+    font-size:12.5px;
+    line-height:1.6;
+    color:var(--dim);
+    border-top:1px solid var(--line);
+    padding-top:14px;
+  }
+
+  .sr{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+
+  @media (max-width:480px){
+    .wrap{padding:22px 14px 44px}
+    .col-head{grid-template-columns:minmax(0,1fr) 40px}
+    .col-head span:nth-child(2){display:none}
+    .row{grid-template-columns:minmax(0,1fr) 40px;gap:6px;margin-bottom:12px}
+    .row .name{grid-column:1 / -1}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page">
+    <h1>Tercih olasılığı hesaplayıcı</h1>
+    <p>Her tercih için kabul olasılığını gir, en az birine girme ihtimalini gör. <code>P = 1 − Π(1 − pᵢ)</code></p>
+  </header>
+
+  <div class="grid">
+
+    <section class="card" aria-labelledby="h-inputs">
+      <h2 id="h-inputs">Tercihler</h2>
+
+      <div class="col-head" aria-hidden="true">
+        <span>İsim (opsiyonel)</span>
+        <span>Olasılık %</span>
+        <span>Sil</span>
+      </div>
+
+      <div id="rows"></div>
+
+      <div class="toolbar">
+        <button type="button" id="addRow">+ Satır ekle</button>
+        <button type="button" id="clearAll">Temizle</button>
+        <div class="equal">
+          <label class="sr" for="equalVal">Tüm satırlara uygulanacak yüzde</label>
+          <input type="number" id="equalVal" min="0" max="100" step="0.1" inputmode="decimal" placeholder="%">
+          <button type="button" class="primary" id="applyEqual">Hepsini eşitle</button>
+        </div>
+      </div>
+    </section>
+
+    <div>
+      <section class="card" aria-labelledby="h-result">
+        <h2 id="h-result">Sonuç</h2>
+        <div id="result" aria-live="polite"></div>
+      </section>
+
+      <section class="card" aria-labelledby="h-dist">
+        <h2 id="h-dist">Tam olarak k tercihe girme</h2>
+        <div id="dist" class="dist"></div>
+      </section>
+    </div>
+
+  </div>
+
+  <p class="note">
+    Bu hesap tercihlerin birbirinden bağımsız olduğunu varsayar. Puan veya sıralama bazlı
+    yerleştirme sistemlerinde sonuçlar pozitif korelasyonlu olduğundan gerçek olasılık bundan
+    daha düşük olabilir; sonucu bir üst sınır olarak değerlendirin.
+  </p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var KEY = "tercih-olasilik-v1";
+  var INITIAL_ROWS = 10;
+
+  var rowsEl   = document.getElementById("rows");
+  var resultEl = document.getElementById("result");
+  var distEl   = document.getElementById("dist");
+
+  function fmt(n, d){
+    if(d === undefined) d = 2;
+    if(!isFinite(n)) n = 0;
+    return n.toLocaleString("tr-TR", {minimumFractionDigits:d, maximumFractionDigits:d});
+  }
+
+  /* ---------- satırlar ---------- */
+
+  function buildRow(name, val){
+    var row = document.createElement("div");
+    row.className = "row";
+
+    var n = document.createElement("input");
+    n.type = "text";
+    n.className = "name";
+    n.setAttribute("aria-label", "Tercih adı");
+    n.value = name || "";
+
+    var p = document.createElement("input");
+    p.type = "number";
+    p.className = "pct";
+    p.min = "0"; p.max = "100"; p.step = "0.1";
+    p.inputMode = "decimal";
+    p.placeholder = "%";
+    p.setAttribute("aria-label", "Kabul olasılığı, yüzde");
+    p.value = (val === null || val === undefined) ? "" : val;
+
+    var d = document.createElement("button");
+    d.type = "button";
+    d.className = "del";
+    d.textContent = "\u00d7";
+    d.setAttribute("aria-label", "Satırı sil");
+    d.title = "Satırı sil";
+
+    row.appendChild(n); row.appendChild(p); row.appendChild(d);
+    return row;
+  }
+
+  function renumber(){
+    var rows = rowsEl.querySelectorAll(".row");
+    for(var i = 0; i < rows.length; i++){
+      rows[i].querySelector(".name").placeholder = "Tercih " + (i + 1);
+    }
+  }
+
+  function addRow(name, val, focus){
+    var row = buildRow(name, val);
+    rowsEl.appendChild(row);
+    renumber();
+    if(focus) row.querySelector(".pct").focus();
+    return row;
+  }
+
+  /* ---------- okuma & kelepçeleme ---------- */
+
+  function clampInput(input){
+    var raw = String(input.value).trim();
+    if(raw === "") return;
+    var v = Number(raw);
+    if(!isFinite(v)){ input.value = ""; return; }
+    if(v < 0) v = 0;
+    if(v > 100) v = 100;
+    input.value = String(v);
+  }
+
+  function readItems(){
+    var out = [];
+    var rows = rowsEl.querySelectorAll(".row");
+    for(var i = 0; i < rows.length; i++){
+      var nameEl = rows[i].querySelector(".name");
+      var pctEl  = rows[i].querySelector(".pct");
+      var raw = String(pctEl.value).trim();
+      if(raw === "") continue;
+      var v = Number(raw);
+      if(!isFinite(v)) continue;
+      if(v < 0) v = 0;
+      if(v > 100) v = 100;
+      out.push({
+        name: nameEl.value.trim() || nameEl.placeholder,
+        p: v / 100
+      });
+    }
+    return out;
+  }
+
+  /* ---------- hesap ---------- */
+
+  function poissonBinomial(items){
+    var dp = [1];
+    for(var i = 0; i < items.length; i++){
+      var p = items[i].p;
+      var nd = new Array(dp.length + 1);
+      for(var z = 0; z < nd.length; z++) nd[z] = 0;
+      for(var j = 0; j < dp.length; j++){
+        nd[j]     += dp[j] * (1 - p);
+        nd[j + 1] += dp[j] * p;
+      }
+      dp = nd;
+    }
+    return dp;
+  }
+
+  function render(){
+    var items = readItems();
+
+    if(items.length === 0){
+      resultEl.innerHTML =
+        '<p class="empty">Henüz geçerli bir giriş yok. Soldaki satırlara 0 ile 100 arasında ' +
+        'bir yüzde yazdığında sonuç burada anında görünür.</p>';
+      distEl.innerHTML =
+        '<p class="empty">Dağılım için en az bir tercihe olasılık gir.</p>';
+      return;
+    }
+
+    var pNone = 1, expected = 0;
+    for(var i = 0; i < items.length; i++){
+      pNone *= (1 - items[i].p);
+      expected += items[i].p;
+    }
+    var pAny = 1 - pNone;
+
+    resultEl.innerHTML =
+      '<div class="headline">' +
+        '<span class="big">%' + fmt(pAny * 100) + '</span>' +
+        '<span class="cap">en az bir tercihe girme olasılığı</span>' +
+      '</div>' +
+      '<div class="bar"><i style="width:' + (pAny * 100).toFixed(2) + '%"></i></div>' +
+      '<dl class="stats">' +
+        '<div class="stat"><dt>Hiçbirine girememe</dt><dd>%' + fmt(pNone * 100) + '</dd></div>' +
+        '<div class="stat"><dt>Beklenen kabul sayısı</dt><dd>' + fmt(expected) + '</dd></div>' +
+        '<div class="stat"><dt>Aktif tercih</dt><dd>' + items.length + '</dd></div>' +
+      '</dl>';
+
+    var dp = poissonBinomial(items);
+    var max = 0;
+    for(var m = 0; m < dp.length; m++) if(dp[m] > max) max = dp[m];
+
+    var html = "";
+    for(var k = 0; k < dp.length; k++){
+      var w = max > 0 ? (dp[k] / max) * 100 : 0;
+      var cls = "dist-row" + (k === 0 ? " zero" : "") + (dp[k] === max ? " peak" : "");
+      html +=
+        '<div class="' + cls + '">' +
+          '<span class="k">k = ' + k + '</span>' +
+          '<span class="track"><i class="fill" style="width:' + w.toFixed(2) + '%"></i></span>' +
+          '<span class="v">%' + fmt(dp[k] * 100) + '</span>' +
+        '</div>';
+    }
+    distEl.innerHTML = html;
+  }
+
+  /* ---------- kayıt ---------- */
+
+  function save(){
+    try{
+      var data = [];
+      var rows = rowsEl.querySelectorAll(".row");
+      for(var i = 0; i < rows.length; i++){
+        data.push({
+          n: rows[i].querySelector(".name").value,
+          v: rows[i].querySelector(".pct").value
+        });
+      }
+      localStorage.setItem(KEY, JSON.stringify(data));
+    }catch(e){ /* depolama yoksa sessizce devam */ }
+  }
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(KEY);
+      if(!raw) return false;
+      var data = JSON.parse(raw);
+      if(!Array.isArray(data) || data.length === 0) return false;
+      for(var i = 0; i < data.length; i++){
+        addRow(data[i] && data[i].n, data[i] && data[i].v, false);
+      }
+      return true;
+    }catch(e){ return false; }
+  }
+
+  function update(){ save(); render(); }
+
+  /* ---------- olaylar ---------- */
+
+  rowsEl.addEventListener("input", function(e){
+    if(e.target.classList.contains("pct") || e.target.classList.contains("name")) update();
+  });
+
+  rowsEl.addEventListener("change", function(e){
+    if(e.target.classList.contains("pct")){ clampInput(e.target); update(); }
+  });
+
+  rowsEl.addEventListener("click", function(e){
+    var btn = e.target.closest(".del");
+    if(!btn) return;
+    var row = btn.closest(".row");
+    var all = rowsEl.querySelectorAll(".row");
+    if(all.length > 1){
+      var next = row.nextElementSibling || row.previousElementSibling;
+      row.remove();
+      if(next) next.querySelector(".pct").focus();
+    }else{
+      row.querySelector(".name").value = "";
+      row.querySelector(".pct").value = "";
+    }
+    renumber();
+    update();
+  });
+
+  document.getElementById("addRow").addEventListener("click", function(){
+    addRow("", "", true);
+    update();
+  });
+
+  document.getElementById("clearAll").addEventListener("click", function(){
+    var rows = rowsEl.querySelectorAll(".row");
+    for(var i = 0; i < rows.length; i++){
+      rows[i].querySelector(".name").value = "";
+      rows[i].querySelector(".pct").value = "";
+    }
+    document.getElementById("equalVal").value = "";
+    update();
+  });
+
+  var equalVal = document.getElementById("equalVal");
+
+  function applyEqual(){
+    clampInput(equalVal);
+    var raw = String(equalVal.value).trim();
+    if(raw === "") { equalVal.focus(); return; }
+    var v = Number(raw);
+    if(!isFinite(v)) return;
+    var rows = rowsEl.querySelectorAll(".row");
+    for(var i = 0; i < rows.length; i++){
+      rows[i].querySelector(".pct").value = String(v);
+    }
+    update();
+  }
+
+  document.getElementById("applyEqual").addEventListener("click", applyEqual);
+  equalVal.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){ e.preventDefault(); applyEqual(); }
+  });
+
+  /* ---------- başlangıç ---------- */
+
+  if(!load()){
+    for(var i = 0; i < INITIAL_ROWS; i++) addRow("", "", false);
+  }
+  renumber();
+  render();
+
+})();
+</script>
+</body>
+</html>
